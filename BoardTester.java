@@ -92,32 +92,38 @@ public class BoardTester {
         System.out.println("Out of place blocks: " + fullOutOfPlaceBoard.hamming());
     }
 
-    private static void testManhattan() {
-        System.out.println("Manhattan distance of a goal board is " +
-                                   new Board(GOAL_BLOCKS).manhattan());
-        Board testBoard = new Board(MANHATTAN_2_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
-        testBoard = new Board(MANHATTAN_3_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
-        testBoard = new Board(MANHATTAN_4_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
-        testBoard = new Board(MANHATTAN_5_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+    // private static void testManhattan() {
+    //     System.out.println("Manhattan distance of a goal board is " +
+    //                                new Board(GOAL_BLOCKS).manhattan());
+    //     Board testBoard = new Board(MANHATTAN_2_BLOCKS);
+    //     System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
+    //                                testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+    //     testBoard = new Board(MANHATTAN_3_BLOCKS);
+    //     System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
+    //                                testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+    //     testBoard = new Board(MANHATTAN_4_BLOCKS);
+    //     System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
+    //                                testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+    //     testBoard = new Board(MANHATTAN_5_BLOCKS);
+    //     System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
+    //                                testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+    // }
+
+    private static void testTwin(int[][] inputBlocks) {
+        Board aBoard = new Board(inputBlocks);
+        System.out.println("Twin of \n" + aBoard + " is \n" + aBoard.twin());
     }
 
     public static void main(String[] args) {
         // testConstructor();
         // testBoardToString();
         // testGoalBoard();
-        testEquals();
+        // testEquals();
         // testGoal(GOAL_BLOCKS);
         // testGoal(TEST_BLOCKS);
         // testHamming();
         // testManhattan();
+        // testTwin(TEST_BLOCKS);
 
     }
 

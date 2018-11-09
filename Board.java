@@ -1,8 +1,10 @@
+import edu.princeton.cs.algs4.StdRandom;
+
 public class Board {
 
     private static final byte MIN_DIMENSION = 2;
     private static final byte MAX_DIMENSION = 127;
-    private final byte[] board; // board representation as 1d array of size n^2
+    private final byte[] blocksArray; // board representation as 1d array of size n^2
     private final byte n;
 
     public Board(int[][] blocks) { // construct a board from an n-by-n array of blocks
@@ -16,13 +18,21 @@ public class Board {
                 throw new IllegalArgumentException();
             }
         }
-
         n = (byte) blocks.length;
-        board = new byte[n * n];
+        blocksArray = new byte[n * n];
         for (int i = 0, k = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                board[k++] = (byte) blocks[i][j]; // converting to our board representation
+                blocksArray[k++] = (byte) blocks[i][j]; // converting to 1-d representation
             }
+        }
+    }
+
+    private Board(Board board) { // copy constructor, used in Board.twin
+        if (board == null) throw new IllegalArgumentException();
+        n = board.n;
+        blocksArray = new byte[n * n];
+        for (int i = 0; i < board.blocksArray.length; i++) {
+            blocksArray[i] = board.blocksArray[i];
         }
     }
 
@@ -34,7 +44,7 @@ public class Board {
         int hammingDistance = 0;
         for (int i = 0; i < n * n - 1; i++) { // run through all array positions except last
             // as we don't count the blank square when computing priorities
-            if (i + 1 != board[i]) { // board[i] should be equal to i + 1
+            if (i + 1 != blocksArray[i]) { // blocksArray[i] should be equal to i + 1
                 hammingDistance++;
             }
         }
@@ -44,16 +54,16 @@ public class Board {
     public int manhattan() { // sum of Manhattan distances between blocks and goal
         int manhattanSum = 0;
         for (int i = 0; i < n * n; i++) { // a pass from every block
-            byte block = board[i];
+            byte block = blocksArray[i];
             if (block == 0) { // do nothing when zero is found
             }
             else {
-                // which row and column is occupied by the block?
+                // which row and column corresponds to the examined index?
                 byte row = (byte) (i / n);
                 byte column = (byte) (i % n);
-                // goal row & col  are determined by the block's value
-                byte goalRow = (byte) ((board[i] - 1) / n);
-                byte goalCol = (byte) ((board[i] - 1) % n);
+                // goal row & col are determined by the block's value
+                byte goalRow = (byte) ((blocksArray[i] - 1) / n);
+                byte goalCol = (byte) ((blocksArray[i] - 1) % n);
                 int manhDistance = Math.abs(goalCol - column) + Math.abs(goalRow - row);
                 manhattanSum += manhDistance;
             }
@@ -63,18 +73,24 @@ public class Board {
 
     public boolean isGoal() {
         for (int i = 0; i < n * n - 1; i++) {
-            if (board[i] != i + 1) {
+            if (blocksArray[i] != i + 1) {
                 return false;
             }
         }
-        if (board[n * n - 1] != 0) {
+        if (blocksArray[n * n - 1] != 0) { // extra check to see if zero is the last element
             return false;
         }
         return true;
     }
 
     public Board twin() { // a board that is obtained by exchanging any pair of blocks
-        return null;
+        Board twinBoard= new Board(this); // provide a Board copy using copy constructor
+        // pick a block at random (except last) and exchange it with next block
+        int randomBlockIndex = StdRandom.uniform(twinBoard.blocksArray.length - 1);
+        byte swap = twinBoard.blocksArray[randomBlockIndex];
+        twinBoard.blocksArray[randomBlockIndex] = twinBoard.blocksArray[randomBlockIndex + 1];
+        twinBoard.blocksArray[randomBlockIndex + 1] = swap;
+        return twinBoard;
     }
 
     public boolean equals(Object that) { // does this board equal y?
@@ -85,13 +101,12 @@ public class Board {
         if (this.n != thatBoard.n) return false; // should have same dimensions
         int i = 0;
         while (i < this.n * this.n) {
-            if (this.board[i] != thatBoard.board[i]) {
+            if (this.blocksArray[i] != thatBoard.blocksArray[i]) {
                 return false;
             }
             i++;
         }
         return true;
-
     }
 
     public Iterable<Board> neighbors() { // all neighboring boards
@@ -106,7 +121,7 @@ public class Board {
         s.append(n + "\n");
         for (int i = 0, k = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                s.append(String.format("%2d ", board[k++]));
+                s.append(String.format("%2d ", blocksArray[k++]));
             }
             s.append("\n");
         }
@@ -118,7 +133,7 @@ public class Board {
     }
 
     // for testing purposes only; make public :)
-    public Board getGoalBoard() {
+    private Board getGoalBoard() {
         int[][] goalArray = new int[n][n];
         for (int i = 0, k = 1; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -127,6 +142,5 @@ public class Board {
         }
         goalArray[n-1][n-1] = 0;
         return new Board(goalArray);
-
     }
 }
