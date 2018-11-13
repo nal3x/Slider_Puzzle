@@ -105,6 +105,20 @@ public class Board {
         return true;
     }
 
+    public Board swapBoardPositions(int pos1, int pos2) {
+        // helper method which returns a new Board with swapped blocks between pos1 & pos2 using
+        // our 1-d representation
+        if (pos1 < 0 || pos1 >= blocksArray.length ||
+                pos2 < 0 || pos2 >= blocksArray.length) {
+            return null;
+        }
+        Board swapped = new Board(this); // get a copy
+        byte swappedBlock = swapped.blocksArray[pos1];
+        swapped.blocksArray[pos1] = swapped.blocksArray[pos2];
+        swapped.blocksArray[pos2] = swappedBlock;
+        return swapped;
+    }
+
     public Iterable<Board> neighbors() { // all neighboring boards
         Stack<Board> boardNeighbors = new Stack<>();
         // a search to find index of 0 in blocksArray
@@ -128,20 +142,6 @@ public class Board {
             boardNeighbors.push(swapBoardPositions(zeroIndex, zeroIndex + 1));
         }
         return boardNeighbors;
-    }
-
-    private Board swapBoardPositions(int pos1, int pos2) {
-        // helper method which returns a new Board with swapped blocks between pos1 & pos2 using
-        // our 1-d representation
-        if (pos1 < 0 || pos1 >= blocksArray.length ||
-                pos2 < 0 || pos2 >= blocksArray.length) {
-            return null;
-        }
-        Board swapped = new Board(this); // get a copy
-        byte swappedBlock = swapped.blocksArray[pos1];
-        swapped.blocksArray[pos1] = swapped.blocksArray[pos2];
-        swapped.blocksArray[pos2] = swappedBlock;
-        return swapped;
     }
 
     public String toString() { // string representation of this board (in the output format specified below)
@@ -170,15 +170,5 @@ public class Board {
         }
     }
 
-    private Board getGoalBoard() {
-        // for testing purposes only; make public :)
-        int[][] goalArray = new int[n][n];
-        for (int i = 0, k = 1; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                goalArray[i][j] = k++;
-            }
-        }
-        goalArray[n-1][n-1] = 0;
-        return new Board(goalArray);
-    }
+
 }

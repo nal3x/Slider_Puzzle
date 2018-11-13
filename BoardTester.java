@@ -58,13 +58,6 @@ public class BoardTester {
         System.out.println(new Board(TEST_BLOCKS));
     }
 
-    // private static void testGoalBoard() {
-    //     System.out.println("***Testing Goal Board method***");
-    //     Board testBoard = new Board(TEST_BLOCKS);
-    //     System.out.println("For the following board: \n" + testBoard);
-    //     System.out.println("The goal board is: \n" + testBoard.getGoalBoard().toString());
-    // }
-
     private static void testEquals() {
         Board thisBoard = new Board(TEST_BLOCKS);
         System.out.println("This board equals to null: " + thisBoard.equals(null));
@@ -94,17 +87,13 @@ public class BoardTester {
         System.out.println("Manhattan distance of a goal board is " +
                                    new Board(GOAL_BLOCKS).manhattan());
         Board testBoard = new Board(MANHATTAN_2_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+        System.out.println("Manhattan distance of \n" + testBoard +"is " + testBoard.manhattan());
         testBoard = new Board(MANHATTAN_3_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+        System.out.println("Manhattan distance of \n" + testBoard +"is " + testBoard.manhattan());
         testBoard = new Board(MANHATTAN_4_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+        System.out.println("Manhattan distance of \n" + testBoard +"is " + testBoard.manhattan());
         testBoard = new Board(MANHATTAN_5_BLOCKS);
-        System.out.println("Manhattan distance of \n" + testBoard + "and goal board \n" +
-                                   testBoard.getGoalBoard() +"is " + testBoard.manhattan());
+        System.out.println("Manhattan distance of \n" + testBoard + "is " + testBoard.manhattan());
     }
 
     private static void testTwin(int[][] inputBlocks) {
