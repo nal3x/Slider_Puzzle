@@ -105,7 +105,7 @@ public class Board {
         return true;
     }
 
-    public Board swapBoardPositions(int pos1, int pos2) {
+    private Board swapBoardPositions(int pos1, int pos2) {
         // helper method which returns a new Board with swapped blocks between pos1 & pos2 using
         // our 1-d representation
         if (pos1 < 0 || pos1 >= blocksArray.length ||

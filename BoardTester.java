@@ -101,19 +101,19 @@ public class BoardTester {
         System.out.println("Twin of \n" + aBoard + " is \n" + aBoard.twin());
     }
 
-    public static void testSwappedBoard(int[][] blocks) {
-        Board testBoard = new Board(blocks);
-        System.out.println("Initial board is\n" + testBoard);
-        Board swappedBoard = testBoard.swapBoardPositions(0, 1);
-        System.out.println("After swapping initial blocks\n" + swappedBoard);
-        int lastBlockIndex = swappedBoard.dimension() * swappedBoard.dimension() - 1;
-        swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex - 1, lastBlockIndex);
-        System.out.println("After swapping last blocks\n" + swappedBoard);
-        swappedBoard = swappedBoard.swapBoardPositions(0, lastBlockIndex);
-        System.out.println("After swapping diagonal blocks\n" + swappedBoard);
-        swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex, lastBlockIndex + 1);
-        System.out.println("A new board with with out of bounds swapping\n" + swappedBoard);
-    }
+    // public static void testSwappedBoard(int[][] blocks) {
+    //     Board testBoard = new Board(blocks);
+    //     System.out.println("Initial board is\n" + testBoard);
+    //     Board swappedBoard = testBoard.swapBoardPositions(0, 1);
+    //     System.out.println("After swapping initial blocks\n" + swappedBoard);
+    //     int lastBlockIndex = swappedBoard.dimension() * swappedBoard.dimension() - 1;
+    //     swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex - 1, lastBlockIndex);
+    //     System.out.println("After swapping last blocks\n" + swappedBoard);
+    //     swappedBoard = swappedBoard.swapBoardPositions(0, lastBlockIndex);
+    //     System.out.println("After swapping diagonal blocks\n" + swappedBoard);
+    //     swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex, lastBlockIndex + 1);
+    //     System.out.println("A new board with with out of bounds swapping\n" + swappedBoard);
+    // }
 
     public static void testNeighbors() {
         Board testBoard = new Board(TEST_BLOCKS);
