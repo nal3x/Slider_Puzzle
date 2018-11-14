@@ -5,12 +5,12 @@ public class Board {
 
     private static final byte MIN_DIMENSION = 2;
     private static final byte MAX_DIMENSION = 127;
-    private final int[] blocksArray; // board representation as 1d array of size n^2
+    private final int[] blocksArray; // we represent the puzzle board as  a 1d array of size n^2
     private final int n;
     private final int twinIndex1, twinIndex2;
 
-    public Board(int[][] blocks) { // construct a board from an n-by-n array of blocks
-                                   // (where blocks[i][j] = block in row i, column j)
+    public Board(int[][] blocks) {
+
         if (blocks.length < MIN_DIMENSION || blocks.length > MAX_DIMENSION)
             throw new IllegalArgumentException();
 
@@ -26,7 +26,7 @@ public class Board {
                 blocksArray[k++] = blocks[i][j]; // converting to our 1-d representation
             }
         }
-        // find proper block indexes for generation of twin
+        // find and save proper block indexes for generation of twin
         int pos1, pos2;
         do {
             pos1 = StdRandom.uniform(blocksArray.length);
@@ -35,17 +35,6 @@ public class Board {
         // avoid exchanging a block with zero or a block with itself
         twinIndex1 = pos1;
         twinIndex2 = pos2;
-    }
-
-    private Board(Board board) { // copy constructor, used in Board.twin
-        if (board == null) throw new IllegalArgumentException();
-        n = board.n;
-        blocksArray = new int[n * n];
-        twinIndex1 = board.twinIndex1;
-        twinIndex2 = board.twinIndex2;
-        for (int i = 0; i < board.blocksArray.length; i++) {
-            blocksArray[i] = board.blocksArray[i];
-        }
     }
 
     public int dimension() { // board dimension n
@@ -82,11 +71,9 @@ public class Board {
     }
 
     public boolean isGoal() {
-        for (int i = 0; i < n * n; i++) {
-            if (!isInGoalPosition(i)) {
+        for (int i = 0; i < n * n; i++)
+            if (!isInGoalPosition(i))
                 return false;
-            }
-        }
         return true;
     }
 
@@ -101,26 +88,10 @@ public class Board {
         if (this.getClass() != that.getClass()) return false;
         Board thatBoard = (Board) that; // cast must succeed because of previous testi
         if (this.n != thatBoard.n) return false; // should have same dimensions
-        for (int i = 0; i < n * n; i++) {
-            if (this.blocksArray[i] != thatBoard.blocksArray[i]) {
+        for (int i = 0; i < n * n; i++)
+            if (this.blocksArray[i] != thatBoard.blocksArray[i])
                 return false;
-            }
-        }
         return true;
-    }
-
-    private Board swapBoardPositions(int pos1, int pos2) {
-        // returns a new Board with swapped blocks between pos1 & pos2 using
-        // our 1-d representation
-        if (pos1 < 0 || pos1 >= blocksArray.length ||
-                pos2 < 0 || pos2 >= blocksArray.length) {
-            return null;
-        }
-        Board swapped = new Board(this); // get a copy
-        int swappedBlock = swapped.blocksArray[pos1];
-        swapped.blocksArray[pos1] = swapped.blocksArray[pos2];
-        swapped.blocksArray[pos2] = swappedBlock;
-        return swapped;
     }
 
     public Iterable<Board> neighbors() { // all neighboring boards
@@ -160,8 +131,28 @@ public class Board {
         return s.toString();
     }
 
-    public static void main(String[] args) { // unit tests
+    private Board(Board board) { // copy constructor, used in Board.swapBoardPositions
+        if (board == null) throw new IllegalArgumentException();
+        n = board.n;
+        blocksArray = new int[n * n];
+        twinIndex1 = board.twinIndex1;
+        twinIndex2 = board.twinIndex2;
+        for (int i = 0; i < board.blocksArray.length; i++) {
+            blocksArray[i] = board.blocksArray[i];
+        }
+    }
 
+    private Board swapBoardPositions(int pos1, int pos2) {
+        // returns a new Board with swapped blocks between pos1 & pos2 using our 1-d representation
+        if (pos1 < 0 || pos1 >= blocksArray.length ||
+                pos2 < 0 || pos2 >= blocksArray.length) {
+            return null;
+        }
+        Board swapped = new Board(this); // get a copy
+        int swappedBlock = swapped.blocksArray[pos1];
+        swapped.blocksArray[pos1] = swapped.blocksArray[pos2];
+        swapped.blocksArray[pos2] = swappedBlock;
+        return swapped;
     }
 
     private boolean isInGoalPosition(int i) {
@@ -173,6 +164,4 @@ public class Board {
             return blocksArray[i] == i + 1; // in our representation blocksArray[i] should equal i+1
         }
     }
-
-
 }

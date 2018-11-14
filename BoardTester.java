@@ -175,8 +175,8 @@ public class BoardTester {
         // testSwappedBoard(TEST_BLOCKS);
         // testNeighbors();
         // testTwin(OTHER_TEST_BLOCKS);
-        Board test = new Board(generateRandomBlocks(12));
-        System.out.println(test);
+        // Board test = new Board(generateRandomBlocks(12));
+        // System.out.println(test);
     }
 
 
