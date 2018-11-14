@@ -5,33 +5,44 @@ public class Board {
 
     private static final byte MIN_DIMENSION = 2;
     private static final byte MAX_DIMENSION = 127;
-    private final byte[] blocksArray; // board representation as 1d array of size n^2
-    private final byte n;
+    private final int[] blocksArray; // board representation as 1d array of size n^2
+    private final int n;
+    private final int twinIndex1, twinIndex2;
 
     public Board(int[][] blocks) { // construct a board from an n-by-n array of blocks
                                    // (where blocks[i][j] = block in row i, column j)
-
-        if (blocks.length < MIN_DIMENSION || blocks.length > MAX_DIMENSION) {
+        if (blocks.length < MIN_DIMENSION || blocks.length > MAX_DIMENSION)
             throw new IllegalArgumentException();
-        }
+
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].length != blocks.length) { // checking each row for correct # of elements
                 throw new IllegalArgumentException();
             }
         }
-        n = (byte) blocks.length;
-        blocksArray = new byte[n * n];
+        n = blocks.length;
+        blocksArray = new int[n * n];
         for (int i = 0, k = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                blocksArray[k++] = (byte) blocks[i][j]; // converting to our 1-d representation
+                blocksArray[k++] = blocks[i][j]; // converting to our 1-d representation
             }
         }
+        // find proper block indexes for generation of twin
+        int pos1, pos2;
+        do {
+            pos1 = StdRandom.uniform(blocksArray.length);
+            pos2 = StdRandom.uniform(blocksArray.length);
+        } while (pos1 == pos2 || blocksArray[pos1] == 0 || blocksArray[pos2] == 0);
+        // avoid exchanging a block with zero or a block with itself
+        twinIndex1 = pos1;
+        twinIndex2 = pos2;
     }
 
     private Board(Board board) { // copy constructor, used in Board.twin
         if (board == null) throw new IllegalArgumentException();
         n = board.n;
-        blocksArray = new byte[n * n];
+        blocksArray = new int[n * n];
+        twinIndex1 = board.twinIndex1;
+        twinIndex2 = board.twinIndex2;
         for (int i = 0; i < board.blocksArray.length; i++) {
             blocksArray[i] = board.blocksArray[i];
         }
@@ -55,14 +66,14 @@ public class Board {
     public int manhattan() { // sum of Manhattan distances between blocks and goal
         int manhattanSum = 0;
         for (int i = 0; i < n * n; i++) { // a pass from every block
-            byte block = blocksArray[i];
+            int block = blocksArray[i];
             if (block != 0) { // do nothing when zero is found
                 // which row and column corresponds to the examined index?
-                byte row = (byte) (i / n);
-                byte column = (byte) (i % n);
+                int row = i / n;
+                int column = i % n;
                 // goal row & col are determined by the block's value
-                byte goalRow = (byte) ((blocksArray[i] - 1) / n);
-                byte goalCol = (byte) ((blocksArray[i] - 1) % n);
+                int goalRow =  (blocksArray[i] - 1) / n;
+                int goalCol =  (blocksArray[i] - 1) % n;
                 int manhDistance = Math.abs(goalCol - column) + Math.abs(goalRow - row);
                 manhattanSum += manhDistance;
             }
@@ -79,15 +90,8 @@ public class Board {
         return true;
     }
 
-    // TODO: modify it by using Board.swapBoardPositions
     public Board twin() { // a board that is obtained by exchanging any pair of blocks
-        Board twinBoard = new Board(this); // provide a Board copy using copy constructor
-        // pick a block at random (except last) and exchange it with next block
-        int randomBlockIndex = StdRandom.uniform(twinBoard.blocksArray.length - 1);
-        byte swap = twinBoard.blocksArray[randomBlockIndex];
-        twinBoard.blocksArray[randomBlockIndex] = twinBoard.blocksArray[randomBlockIndex + 1];
-        twinBoard.blocksArray[randomBlockIndex + 1] = swap;
-        return twinBoard;
+        return swapBoardPositions(twinIndex1, twinIndex2);
     }
 
     @Override
@@ -105,15 +109,15 @@ public class Board {
         return true;
     }
 
-    public Board swapBoardPositions(int pos1, int pos2) {
-        // helper method which returns a new Board with swapped blocks between pos1 & pos2 using
+    private Board swapBoardPositions(int pos1, int pos2) {
+        // returns a new Board with swapped blocks between pos1 & pos2 using
         // our 1-d representation
         if (pos1 < 0 || pos1 >= blocksArray.length ||
                 pos2 < 0 || pos2 >= blocksArray.length) {
             return null;
         }
         Board swapped = new Board(this); // get a copy
-        byte swappedBlock = swapped.blocksArray[pos1];
+        int swappedBlock = swapped.blocksArray[pos1];
         swapped.blocksArray[pos1] = swapped.blocksArray[pos2];
         swapped.blocksArray[pos2] = swappedBlock;
         return swapped;

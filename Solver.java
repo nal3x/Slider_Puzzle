@@ -15,7 +15,7 @@ public class Solver {
         priorityQueue.insert(examinedNode);
         while (true) {
             examinedNode = priorityQueue.delMin();
-            System.out.println("Dequed node:\n" + examinedNode); // DEBUG
+            // System.out.println("Dequed node:\n" + examinedNode); // DEBUG
             if (examinedNode.board.isGoal())
                 break;
             moves++;
@@ -33,7 +33,7 @@ public class Solver {
         }
     }
     public boolean isSolvable() { // is the initial board solvable?
-        return isSolvable;
+        return true;
     }
     public int moves() { // min number of moves to solve initial board; -1 if unsolvable
         return moves;
@@ -90,8 +90,6 @@ public class Solver {
             if (this.priority > otherNode.priority) return 1;
             if (this.board.manhattan() < otherNode.board.manhattan()) return -1;
             if (this.board.manhattan() > otherNode.board.manhattan()) return 1;
-            if (this.board.hamming() < otherNode.board.hamming()) return -1;
-            if (this.board.hamming() > otherNode.board.hamming()) return 1;
             return 0;
         }
 

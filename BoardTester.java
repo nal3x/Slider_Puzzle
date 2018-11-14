@@ -1,4 +1,3 @@
-
 public class BoardTester {
     private static final int[][] TEST_BLOCKS = { { 0, 1, 2}, { 3, 4, 5}, { 6, 7, 8} };
     private static final int[][] GOAL_BLOCKS = { { 1, 2}, { 3, 0}};
@@ -101,19 +100,19 @@ public class BoardTester {
         System.out.println("Twin of \n" + aBoard + " is \n" + aBoard.twin());
     }
 
-    public static void testSwappedBoard(int[][] blocks) {
-        Board testBoard = new Board(blocks);
-        System.out.println("Initial board is\n" + testBoard);
-        Board swappedBoard = testBoard.swapBoardPositions(0, 1);
-        System.out.println("After swapping initial blocks\n" + swappedBoard);
-        int lastBlockIndex = swappedBoard.dimension() * swappedBoard.dimension() - 1;
-        swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex - 1, lastBlockIndex);
-        System.out.println("After swapping last blocks\n" + swappedBoard);
-        swappedBoard = swappedBoard.swapBoardPositions(0, lastBlockIndex);
-        System.out.println("After swapping diagonal blocks\n" + swappedBoard);
-        swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex, lastBlockIndex + 1);
-        System.out.println("A new board with with out of bounds swapping\n" + swappedBoard);
-    }
+    // public static void testSwappedBoard(int[][] blocks) {
+    //     Board testBoard = new Board(blocks);
+    //     System.out.println("Initial board is\n" + testBoard);
+    //     Board swappedBoard = testBoard.swapBoardPositions(0, 1);
+    //     System.out.println("After swapping initial blocks\n" + swappedBoard);
+    //     int lastBlockIndex = swappedBoard.dimension() * swappedBoard.dimension() - 1;
+    //     swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex - 1, lastBlockIndex);
+    //     System.out.println("After swapping last blocks\n" + swappedBoard);
+    //     swappedBoard = swappedBoard.swapBoardPositions(0, lastBlockIndex);
+    //     System.out.println("After swapping diagonal blocks\n" + swappedBoard);
+    //     swappedBoard = swappedBoard.swapBoardPositions(lastBlockIndex, lastBlockIndex + 1);
+    //     System.out.println("A new board with with out of bounds swapping\n" + swappedBoard);
+    // }
 
     public static void testNeighbors() {
         Board testBoard = new Board(TEST_BLOCKS);
@@ -147,8 +146,20 @@ public class BoardTester {
         for (Board neighbor : neighbors) {
             System.out.println(neighbor);
         }
+    }
 
-
+    private static int[][] generateRandomBlocks(int dimension) {
+        int[][] blocks = new int[dimension][dimension];
+        int k = 0;
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                blocks[i][j] = k++;
+            }
+        }
+        // for (int i = 0; i < dimension; i++) {
+        //     StdRandom.shuffle(blocks[][]);
+        // }
+        return blocks;
     }
 
     public static void main(String[] args) {
@@ -162,7 +173,10 @@ public class BoardTester {
         // testManhattan();
         // testTwin(TEST_BLOCKS);
         // testSwappedBoard(TEST_BLOCKS);
-        testNeighbors();
+        // testNeighbors();
+        // testTwin(OTHER_TEST_BLOCKS);
+        Board test = new Board(generateRandomBlocks(12));
+        System.out.println(test);
     }
 
 
