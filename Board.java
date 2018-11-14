@@ -1,19 +1,25 @@
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdRandom;
 
+/******************************************************************************
+ *  A class representing a board for the 8-puzzle problem with zero representing the blank square.
+ *  Twin is used to determine if a puzzle is solvable: if a board in unsolvable, its twin surely has
+ *  a solution. Hamming and manhattan distances are used in the calculation of the priority of a
+ *  search node in the game tree. Internal representation of the board is a 1d array of size n^2.
+ *
+ ******************************************************************************/
+
 public class Board {
 
     private static final byte MIN_DIMENSION = 2;
     private static final byte MAX_DIMENSION = 127;
-    private final int[] blocksArray; // we represent the puzzle board as  a 1d array of size n^2
+    private final int[] blocksArray;
     private final int n;
     private final int twinIndex1, twinIndex2;
 
     public Board(int[][] blocks) {
-
         if (blocks.length < MIN_DIMENSION || blocks.length > MAX_DIMENSION)
             throw new IllegalArgumentException();
-
         for (int i = 0; i < blocks.length; i++) {
             if (blocks[i].length != blocks.length) { // checking each row for correct # of elements
                 throw new IllegalArgumentException();
@@ -109,10 +115,9 @@ public class Board {
         Stack<Board> boardNeighbors = new Stack<>();
         // a search to find index of 0 in blocksArray
         int zeroIndex = 0;
-        while (blocksArray[zeroIndex] != 0) { // TODO: we do not check if we exceed array length
+        while (blocksArray[zeroIndex] != 0)
             zeroIndex++;
-        }
-        // swaping rows +-1,
+        // swaping rows first and then columns
         if (zeroIndex + n < blocksArray.length) { // check for available row below
             // we can exchange zero with block below
             boardNeighbors.push(swapBoardPositions(zeroIndex, zeroIndex + n));
@@ -130,7 +135,7 @@ public class Board {
         return boardNeighbors;
     }
 
-    public String toString() { // string representation of this board (in the output format specified below)
+    public String toString() { // string representation of this board
         StringBuilder s = new StringBuilder();
         s.append(n + "\n");
         for (int i = 0, k = 0; i < n; i++) {

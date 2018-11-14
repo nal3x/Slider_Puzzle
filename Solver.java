@@ -7,7 +7,8 @@ import edu.princeton.cs.algs4.StdOut;
  *  Attempts to find a solution to the initial board using the A* algorithm. Both initial and twin
  *  board are entered in the same priority queue. As a result, at the end of the computation the
  *  last node contains the solution. Traversing the game tree bottom-up we check if the solution
- *  came from the initial board or its twin to conclude if initial board is solvable.
+ *  came from the initial board or its twin to conclude if initial board is solvable. The Manhattan
+ *  priority of a search node is cached as a processing optimization.
  *
  ******************************************************************************/
 
@@ -22,7 +23,6 @@ public class Solver {
         priorityQueue.insert(new SearchNode(null, initial.twin())); // also insert twin
         while (true) {
             examinedNode = priorityQueue.delMin(); // dequeuing the node with least priority
-            // System.out.println("Dequed node:\n" + examinedNode); // DEBUG
             if (examinedNode.board.isGoal())
                 break;
             for (Board neighborBoard : examinedNode.board.neighbors()) {
@@ -32,10 +32,6 @@ public class Solver {
                 } else
                     priorityQueue.insert(new SearchNode(examinedNode, neighborBoard));
             }
-            // System.out.printf("******Priority Queue contents:******\n");
-            // for (SearchNode node : priorityQueue) {
-            //     System.out.println(node);
-            // }
         }
         // check to see which board (initial or twin) led to solution
         SearchNode node = examinedNode;
@@ -104,8 +100,8 @@ public class Solver {
             // Manhattan distances.
             if (this.priority < otherNode.priority) return -1;
             if (this.priority > otherNode.priority) return 1;
-            if (this.board.manhattan() < otherNode.board.manhattan()) return -1;
-            if (this.board.manhattan() > otherNode.board.manhattan()) return 1;
+            // if (this.board.manhattan() < otherNode.board.manhattan()) return -1;
+            // if (this.board.manhattan() > otherNode.board.manhattan()) return 1;
             return 0;
         }
 
