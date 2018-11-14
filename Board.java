@@ -37,6 +37,17 @@ public class Board {
         twinIndex2 = pos2;
     }
 
+    private Board(Board board) { // copy constructor, used in Board.swapBoardPositions
+        if (board == null) throw new IllegalArgumentException();
+        n = board.n;
+        blocksArray = new int[n * n];
+        twinIndex1 = board.twinIndex1;
+        twinIndex2 = board.twinIndex2;
+        for (int i = 0; i < board.blocksArray.length; i++) {
+            blocksArray[i] = board.blocksArray[i];
+        }
+    }
+
     public int dimension() { // board dimension n
         return n;
     }
@@ -97,7 +108,7 @@ public class Board {
     public Iterable<Board> neighbors() { // all neighboring boards
         Stack<Board> boardNeighbors = new Stack<>();
         // a search to find index of 0 in blocksArray
-        byte zeroIndex = 0;
+        int zeroIndex = 0;
         while (blocksArray[zeroIndex] != 0) { // TODO: we do not check if we exceed array length
             zeroIndex++;
         }
@@ -129,17 +140,6 @@ public class Board {
             s.append("\n");
         }
         return s.toString();
-    }
-
-    private Board(Board board) { // copy constructor, used in Board.swapBoardPositions
-        if (board == null) throw new IllegalArgumentException();
-        n = board.n;
-        blocksArray = new int[n * n];
-        twinIndex1 = board.twinIndex1;
-        twinIndex2 = board.twinIndex2;
-        for (int i = 0; i < board.blocksArray.length; i++) {
-            blocksArray[i] = board.blocksArray[i];
-        }
     }
 
     private Board swapBoardPositions(int pos1, int pos2) {

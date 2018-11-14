@@ -3,17 +3,25 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
+/******************************************************************************
+ *  Attempts to find a solution to the initial board using the A* algorithm. Both initial and twin
+ *  board are entered in the same priority queue. As a result, at the end of the computation the
+ *  last node contains the solution. Traversing the game tree bottom-up we check if the solution
+ *  came from the initial board or its twin to conclude if initial board is solvable.
+ *
+ ******************************************************************************/
+
 public class Solver {
-    private SearchNode examinedNode; // should contain goal board at the end
+    private SearchNode examinedNode; // contains goal board at the end either from initial or twin board
     private boolean isSolvable;
 
     public Solver(Board initial) { // find a solution to the initial board (using the A* algorithm)
-        // isSolvable is invoked from main client, so we know it's solvable
+        if (initial == null) throw new IllegalArgumentException();
         MinPQ<SearchNode> priorityQueue = new MinPQ<>();
-        examinedNode = new SearchNode(null, initial);
-        priorityQueue.insert(examinedNode);
+        priorityQueue.insert(new SearchNode(null, initial));
+        priorityQueue.insert(new SearchNode(null, initial.twin())); // also insert twin
         while (true) {
-            examinedNode = priorityQueue.delMin();
+            examinedNode = priorityQueue.delMin(); // dequeuing the node with least priority
             // System.out.println("Dequed node:\n" + examinedNode); // DEBUG
             if (examinedNode.board.isGoal())
                 break;
@@ -29,14 +37,23 @@ public class Solver {
             //     System.out.println(node);
             // }
         }
+        // check to see which board (initial or twin) led to solution
+        SearchNode node = examinedNode;
+        while (node.predecessor != null) {
+            node = node.predecessor;
+        }
+        if (node.board.equals(initial))
+            isSolvable = true;
     }
     public boolean isSolvable() { // is the initial board solvable?
-        return true;
+        return isSolvable;
     }
     public int moves() { // min number of moves to solve initial board; -1 if unsolvable
+        if (!isSolvable) return -1;
         return examinedNode.moves;
     }
     public Iterable<Board> solution() { // sequence of boards in a shortest solution; null if unsolvable
+        if (!isSolvable) return null;
         Stack<Board> solutionBoards = new Stack<>();
         SearchNode node = examinedNode;
         while (node != null) {
@@ -78,13 +95,13 @@ public class Solver {
             this.board = board;
             if (predecessor != null)
                 moves = predecessor.moves + 1;
-            priority = board.manhattan() + moves; // caching of priority
+            priority = board.manhattan() + moves; // compute and cache node priority
         }
 
         @Override
         public int compareTo(SearchNode otherNode) {
-            // When 2 search nodes have same Manhattan priority, we break ties by comparing
-            // Manhattan distances and then Hamming distances of the two boards.
+            // When 2 search nodes have the same Manhattan priority, we break ties by comparing
+            // Manhattan distances.
             if (this.priority < otherNode.priority) return -1;
             if (this.priority > otherNode.priority) return 1;
             if (this.board.manhattan() < otherNode.board.manhattan()) return -1;
