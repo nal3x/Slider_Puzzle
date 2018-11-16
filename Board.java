@@ -78,10 +78,23 @@ public class Board {
                 int row = i / n;
                 int column = i % n;
                 // goal row & col are determined by the block's value
-                int goalRow =  (blocksArray[i] - 1) / n;
-                int goalCol =  (blocksArray[i] - 1) % n;
+                int goalRow = (blocksArray[i] - 1) / n;
+                int goalCol = (blocksArray[i] - 1) % n;
                 int manhDistance = Math.abs(goalCol - column) + Math.abs(goalRow - row);
                 manhattanSum += manhDistance;
+                // // linear conflict optimization: add two to the Manhattan priority function whenever
+                // // two tiles are in their goal row (or column) but are reversed relative to their
+                // // goal position.
+                // if (row == goalRow && column != goalCol) {
+                //     int j = row * n + goalCol; // block index in (row, goalColumn)
+                //     if ((blocksArray[j] - 1) % n == column) // should be on same column as this?
+                //         manhattanSum += 2;
+                // }
+                // if (column == goalCol && row != goalRow) {
+                //     int j = goalRow * n + column; // // block index in (goalRow, column)
+                //     if ((blocksArray[j] - 1) / n == row) // should be on same row as this?
+                //         manhattanSum += 2;
+                // }
             }
         }
         return manhattanSum;
